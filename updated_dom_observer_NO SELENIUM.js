@@ -1,14 +1,20 @@
 
 /* Manual script testing */
 //Test page: https://www.amazon.co.uk/gp/product/B07F3BY75M
-var cssSelector = "#a-page"
+//var cssSelector = "#a-page"
+var cssSelector = "div[role='main']"
 var targetNode = document.querySelector(cssSelector);
 var checkInterval = 5000;
 var resultClassName = "dom-result"; // bespoke name for the class to be used by resultElement
 var resultAttributeName = "data-dom-result"; // bespoke name for the data attribute to be used by resultElement
 
 
-console.log("OK.... Selected element: " + cssSelector);
+if (targetNode) {
+  console.log("Target element found: " + cssSelector); 
+} else {
+  throw new Error("Target element cound not be found: " + cssSelector); 
+}
+
 
 var currentMutationCount = 0; // Callback function to execute when mutations are observed
 
@@ -41,7 +47,6 @@ var callback = function callback(mutationsList, observer) {
           })
         }
             
-        console.log(currentMutationCount);
         currentMutationCount += 1;
         //debugger;
         break;
@@ -49,12 +54,13 @@ var callback = function callback(mutationsList, observer) {
       case "attributes":
         console.log(
           "An attribute was modified. " + "\n" +
-            "Affected Element's (Target) outerHTML: " + "\n" +
+            "Modified element: " + "\n" +
             mutation.target.outerHTML.substring(0,300) + "\n" +
-            "OldValue: " + "\n" +
+            "Previous attribute value: " + "\n" +
             mutation.oldValue + "\n"
         );
-        console.log(currentMutationCount);
+        //console.log(currentMutationCount);
+        console.log("Total Mutations: " + (currentMutationCount + 1));
         currentMutationCount += 1;
         //debugger;
         break;
@@ -72,19 +78,13 @@ function checkDomIsSettled() {
 
   if (startCount == endCount) {
     console.log(
-      " ** Complete! No more mutations detected. We are done here. ** startCount: " +
-        startCount +
-        " / endCount: " +
-        endCount
+      " ** Complete! No more mutations detected. We are done here. ** Total mutations found: " + endCount
     );
     stopCheckingDom();
    // updateResultElementToTrue();
   } else {
     console.log(
-      " Mutations found. Updating startCount. startCount: " +
-        startCount +
-        " / endCount: " +
-        endCount
+      "DOM not settled. New mutations found. Checking again in " + checkInterval + "ms"
     );
 
     startCount = currentMutationCount;
