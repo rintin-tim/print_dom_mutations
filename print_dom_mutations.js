@@ -60,7 +60,7 @@ var callback = function callback(mutationsList, observer) {
 }
 
 function printTotalMutations(mutationType) {
-  console.log("New mutation: "+ "'" + mutationType + "' | " + " Total Mutations: " + (currentMutationCount));
+  console.log("Mutation: "+ "'" + mutationType + "' | " + " Total Mutations: " + (currentMutationCount));
 }
 
 // after timeoutInterval, check if the mutation count has changed. Initiate the 'stop' function if no changes 
